@@ -4,12 +4,10 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
 
-  // states cho 3 loại đơn vị
   const [tempUnit, setTempUnit] = useState("C");
   const [windUnit, setWindUnit] = useState("kmh");
   const [rainUnit, setRainUnit] = useState("mm");
 
-  // Đóng menu khi click ra ngoài
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -27,7 +25,6 @@ export default function Header() {
         Weather Now
       </h1>
 
-      {/* BUTTON OPEN MENU */}
       <button
         onClick={() => setOpen(!open)}
         className="bg-[#1c203f] text-white px-4 py-2 rounded-xl text-sm flex items-center gap-2"
@@ -35,7 +32,6 @@ export default function Header() {
         Units ▾
       </button>
 
-      {/* DROPDOWN */}
       {open && (
         <div
           ref={menuRef}
@@ -49,7 +45,6 @@ export default function Header() {
         >
           <p className="text-sm opacity-80 mb-3">Switch Units</p>
 
-          {/* Temperature */}
           <p className="text-xs opacity-70 mb-2">Temperature</p>
           <div className="flex flex-col gap-1 mb-4">
             <UnitItem
@@ -64,7 +59,6 @@ export default function Header() {
             />
           </div>
 
-          {/* Wind Speed */}
           <p className="text-xs opacity-70 mb-2">Wind Speed</p>
           <div className="flex flex-col gap-1 mb-4">
             <UnitItem
@@ -79,7 +73,6 @@ export default function Header() {
             />
           </div>
 
-          {/* Precipitation */}
           <p className="text-xs opacity-70 mb-2">Precipitation</p>
           <div className="flex flex-col gap-1">
             <UnitItem
@@ -98,8 +91,6 @@ export default function Header() {
     </div>
   );
 }
-
-// UNIT ITEM
 function UnitItem({ label, selected, onClick }) {
   return (
     <button
