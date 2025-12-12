@@ -19,7 +19,6 @@ export default function Home() {
     try {
       const weatherData = await getWeather(city);
       const forecastData = await getForecast(city, 7);
-
       if (!weatherData || !forecastData) {
         setWeather({
           city: "",
