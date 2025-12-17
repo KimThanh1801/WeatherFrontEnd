@@ -2,8 +2,50 @@ import React from "react";
 import HourlyForecast from "./HourlyForecast";
 import DailyForecast from "./DailyForecast";
 import LoadingDots from "./LoadingDots";
+import { WeatherData } from "./../pages/Home";
+interface Condition {
+  text: string;
+  icon: string;
+}
 
-const WeatherDashboard = ({ weather = {}, forecast = [] }) => {
+interface CurrentWeather {
+  temp_c?: number;
+  feelslike_c?: number;
+  humidity?: number;
+  wind_kph?: number;
+  precip_mm?: number;
+  condition?: Condition;
+}
+
+interface Location {
+  name: string;
+  country: string;
+}
+
+interface HourlyData {
+  time: string;
+  temp_c: number;
+  condition: Condition;
+}
+
+interface DailyData {
+  date: string;
+  day: {
+    maxtemp_c: number;
+    mintemp_c: number;
+    condition: Condition;
+  };
+  hour: HourlyData[];
+}
+
+interface WeatherDashboardProps {
+  weather?: WeatherData;   // <-- dùng WeatherData
+  forecast?: DailyData[];
+  loading?: boolean;
+}
+
+
+const WeatherDashboard: React.FC<WeatherDashboardProps> = ({ weather = {}, forecast = [], }) => {
   const isLoading = !weather.current;
 
   const current = weather.current || {};
@@ -12,22 +54,21 @@ const WeatherDashboard = ({ weather = {}, forecast = [] }) => {
   const country = location.country;
   const temp = current.temp_c ? Math.round(current.temp_c) : "--";
   const feelsLike = current.feelslike_c ? Math.round(current.feelslike_c) : "--";
-  const humidity = current.humidity || "--";
+  const humidity = current.humidity ?? "--";
   const wind = current.wind_kph ? Math.round(current.wind_kph) : "--";
-  const precipitation = current.precip_mm || "--";
+  const precipitation = current.precip_mm ?? "--";
   const iconUrl = current.condition?.icon || "/default-icon.png";
 
   const hourly = forecast?.flatMap(day => day.hour) || [];
 
   return (
     <div className="bg-[#0b0c2a] min-h-screen p-4 sm:p-8 text-white flex flex-col lg:flex-row gap-6">
-
       <div className="flex flex-col lg:flex-row w-full gap-6 justify-between">
-
         <div className="flex flex-col gap-6 flex-1">
           <div className={`p-6 rounded-3xl flex items-center justify-center ${isLoading ? "bg-[#111234] h-[220px]" : "bg-gradient-to-br from-[#3a2eff] to-[#7a5bff] shadow-lg flex-col w-full"}`}>
             {isLoading ? (
               <LoadingDots message="Loading..." />
+              //  <img src={Images.LoadingState} alt="Loading State" className="w-16 h-16" />
             ) : (
               <>
                 <div className="w-full text-left">
@@ -74,7 +115,6 @@ const WeatherDashboard = ({ weather = {}, forecast = [] }) => {
         <div className="w-full max-w-xs sm:max-w-sm bg-[#111234] rounded-3xl mx-auto">
           <HourlyForecast hourly={hourly} />
         </div>
-
       </div>
     </div>
   );
