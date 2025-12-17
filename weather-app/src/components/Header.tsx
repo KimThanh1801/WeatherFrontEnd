@@ -1,16 +1,39 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Images } from "../assets";
 
-export default function Header() {
+// Kiểu props cho UnitItem
+interface UnitItemProps {
+  label: string;
+  selected: boolean;
+  onClick: () => void;
+}
+
+function UnitItem({ label, selected, onClick }: UnitItemProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm
+        ${selected ? "bg-[#343a6f]" : "bg-[#1c203f] hover:bg-[#2d325c]"}
+      `}
+    >
+      <span>{label}</span>
+      <span className="opacity-50">›</span>
+    </button>
+  );
+}
+
+// Header component
+const Header: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const menuRef = useRef(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const [tempUnit, setTempUnit] = useState("C");
-  const [windUnit, setWindUnit] = useState("kmh");
-  const [rainUnit, setRainUnit] = useState("mm");
+  const [tempUnit, setTempUnit] = useState<"C" | "F">("C");
+  const [windUnit, setWindUnit] = useState<"kmh" | "mph">("kmh");
+  const [rainUnit, setRainUnit] = useState<"mm" | "inch">("mm");
 
   useEffect(() => {
-    const handler = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     };
@@ -21,8 +44,9 @@ export default function Header() {
   return (
     <div className="flex justify-between items-center w-full px-[40px] py-[40px] relative">
       <h1 className="text-xl font-semibold text-white flex items-center gap-2">
-        <span className="text-yellow-400 text-2xl">☀️</span>
-        Weather Now
+        {/* <span className="text-yellow-400 text-2xl">☀️</span>
+        Weather Now */}
+        <img src={Images.Logo} alt="Logo" className="text-yellow-400 text-2xl" />
       </h1>
 
       <button
@@ -90,17 +114,6 @@ export default function Header() {
       )}
     </div>
   );
-}
-function UnitItem({ label, selected, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm
-        ${selected ? "bg-[#343a6f]" : "bg-[#1c203f] hover:bg-[#2d325c]"}
-      `}
-    >
-      <span>{label}</span>
-      <span className="opacity-50">›</span>
-    </button>
-  );
-}
+};
+
+export default Header;

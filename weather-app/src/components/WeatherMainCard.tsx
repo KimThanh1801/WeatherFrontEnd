@@ -1,6 +1,31 @@
+import React from "react";
 
+// Kiểu cho điều kiện thời tiết
+interface Condition {
+  text: string;
+  icon: string;
+}
 
-export default function WeatherMainCard({ data }) {
+// Kiểu cho dữ liệu current weather
+interface CurrentWeather {
+  temp_c: number;
+  condition: Condition;
+}
+
+// Kiểu cho location
+interface Location {
+  name: string;
+}
+
+// Kiểu cho props data
+interface WeatherMainCardProps {
+  data?: {
+    location: Location;
+    current: CurrentWeather;
+  };
+}
+
+const WeatherMainCard: React.FC<WeatherMainCardProps> = ({ data }) => {
   if (!data || !data.current) return null;
 
   return (
@@ -31,4 +56,6 @@ export default function WeatherMainCard({ data }) {
       <p className="mt-2 opacity-70">{data.current.condition.text}</p>
     </div>
   );
-}
+};
+
+export default WeatherMainCard;
